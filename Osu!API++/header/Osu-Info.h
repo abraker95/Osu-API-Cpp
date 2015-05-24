@@ -103,6 +103,7 @@ class Osu_Info
 		static Osu_Info* Instance;
 
 		Osu_Info();
+		~Osu_Info();
 		Osu_Info(Osu_Info const&);
 		Osu_Info& operator=(Osu_Info const&);
 		

@@ -62,6 +62,7 @@ class Downloader
 
 	private:
 		Downloader();
+		~Downloader();
 		Downloader(Downloader const&);         
 		Downloader& operator=(Downloader const&);
 		static Downloader* Instance;

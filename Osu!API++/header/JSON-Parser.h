@@ -48,6 +48,7 @@ class JSON_Parser
 		static JSON_Parser* Instance;
 
 		JSON_Parser();
+		~JSON_Parser();
 		JSON_Parser(JSON_Parser const&);
 		JSON_Parser& operator=(JSON_Parser const&);
 		

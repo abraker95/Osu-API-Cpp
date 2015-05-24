@@ -5,12 +5,11 @@
 #include "../header/JSON-Parser.h"
 #define MAX(a, b) (a>b? a : b)
 
-JSON_Parser* JSON_Parser::Instance = NULL;
+JSON_Parser* JSON_Parser::Instance = new JSON_Parser;
 
 JSON_Parser& JSON_Parser::getInstance()
 {
-	static JSON_Parser Instance;
-	return Instance;
+	return *JSON_Parser::Instance;
 }
 
 int find(string* _str, char _chr, unsigned _beg = 0, unsigned _end = -1)
@@ -186,5 +185,6 @@ vector<string> JSON_Parser::getValueList(string* _set)
 }
 
 JSON_Parser::JSON_Parser(){}
+JSON_Parser::~JSON_Parser(){ delete JSON_Parser::Instance; }
 JSON_Parser::JSON_Parser(JSON_Parser const&){}
 JSON_Parser& JSON_Parser::operator=(JSON_Parser const&){ return *this; }

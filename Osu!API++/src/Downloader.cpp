@@ -15,12 +15,11 @@ c++ program
 #include "../header/Downloader.h"
 #define CHAR(STR) (char*)STR.c_str()
 
-Downloader* Downloader::Instance = NULL;
+Downloader* Downloader::Instance = new Downloader;
 
 Downloader& Downloader::getInstance()
 {
-	static Downloader Instance;
-	return Instance;
+	return *Downloader::Instance;
 }
 
 /**
@@ -187,5 +186,6 @@ bool Downloader::ishttp(char *url)
 }
 
 Downloader::Downloader(){}
+Downloader::~Downloader(){ delete Downloader::Instance; }
 Downloader::Downloader(Downloader const&){}
 Downloader& Downloader::operator=(Downloader const&){ return *this; }

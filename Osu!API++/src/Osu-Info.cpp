@@ -10,12 +10,11 @@
 #endif
 
 string Osu_Info::key = "";
-Osu_Info* Osu_Info::Instance = NULL;
+Osu_Info* Osu_Info::Instance = new Osu_Info;
 
 Osu_Info& Osu_Info::getInstance()
 {
-	static Osu_Info Instance;
-	return Instance;
+	return *Osu_Info::Instance;
 }
 
 void Osu_Info::setAPIKey(string _key)
@@ -272,5 +271,6 @@ string Osu_Info::getAPIKey()
 }
 
 Osu_Info::Osu_Info(){}
+Osu_Info::~Osu_Info(){ delete Osu_Info::Instance; }
 Osu_Info::Osu_Info(Osu_Info const&){}
 Osu_Info& Osu_Info::operator=(Osu_Info const&){ return *this; }
