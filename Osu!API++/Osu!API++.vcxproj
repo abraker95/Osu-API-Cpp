@@ -65,13 +65,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="header\Downloader.h" />
-    <ClInclude Include="header\JSON-Parser.h" />
+    <ClInclude Include="header\JsonCpp\json\assertions.h" />
+    <ClInclude Include="header\JsonCpp\json\autolink.h" />
+    <ClInclude Include="header\JsonCpp\json\config.h" />
+    <ClInclude Include="header\JsonCpp\json\features.h" />
+    <ClInclude Include="header\JsonCpp\json\forwards.h" />
+    <ClInclude Include="header\JsonCpp\json\json.h" />
+    <ClInclude Include="header\JsonCpp\json\reader.h" />
+    <ClInclude Include="header\JsonCpp\json\value.h" />
+    <ClInclude Include="header\JsonCpp\json\version.h" />
+    <ClInclude Include="header\JsonCpp\json_tool.h" />
     <ClInclude Include="header\Osu-Info.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Downloader.cpp" />
-    <ClCompile Include="src\JSON-Parser.cpp" />
+    <ClCompile Include="src\JsonCpp\json_reader.cpp" />
+    <ClCompile Include="src\JsonCpp\json_value.cpp" />
     <ClCompile Include="src\Osu-Info.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="header\JsonCpp\json_valueiterator.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -40,6 +40,7 @@
 #include <vector>
 #include <string>
 #include <array>
+#include "../header/JsonCpp/json/reader.h"
 #include "JSON-Parser.h"
 #include "Downloader.h"
 
@@ -50,31 +51,121 @@ namespace GAMEMODE{
 	 const string Osu = "0", Taiko = "1", CtB = "2", Mania = "3";
 };
 
+enum class MODE{ get_beatmaps = 0, get_user, get_scores, get_user_best, get_user_recent, get_match };
+enum class PARAM{ user_ID = 0, beatmap_ID, limit, beatmapset_ID, match_ID, autoconverts, game_mode, since };  // event_days and type are not supported for now
+enum class MODS { /* TODO */ SIZE }; // not used for now
+
 class Osu_Info
 {
 	public:
 		template <typename X, typename Y> using Table = pair<vector<X>, vector<Y>>;
+		
+		template<MODE _mode>
+		struct OsuData
+		{
+			OsuData(Json::Value& _data)
+			{
+				data = _data;
+			}
 
-		enum class MODE{ get_beatmaps = 0, get_user, get_scores, get_user_best, get_user_recent, get_match };
-		enum class PARAM{ user_ID = 0, beatmap_ID, limit, beatmapset_ID, match_ID, autoconverts, game_mode, since };  // event_days and type are not supported for now
+			OsuData(){}
 
-		enum class GET_BEATMAPS { beatmapset_id = 0, beatmap_ID, approved, approved_date, last_update, total_length, hit_length, version,
-			artist, title, creator, bpm, source, difficultyrating, diff_size, diff_overall, diff_approach, diff_drain, mode, SIZE
+			string getValue(int _index, string _param)
+			{
+				string value = "";
+				if (data.size() == 0)
+				{
+					#ifdef _DEBUG
+						cout << "ERROR: Data never loaded!" << endl;
+					#endif
+					return value;
+				}
+
+				if(_index>=0 && _index<data.size())
+				{
+					bool valid = false;
+					if (_mode == MODE::get_beatmaps)
+					{
+						valid = (_param == "beatmapset_id") || (_param == "approved") || (_param == "approved_date") ||
+						        (_param == "last_update") || (_param == "total_length") || (_param == "hit_length") ||
+								(_param == "version") || (_param == "artist") || (_param == "title") ||
+								(_param == "creator") || (_param == "bpm") || (_param == "source") ||
+								(_param == "difficultyrating") || (_param == "diff_size") || (_param == "diff_overall") ||
+								(_param == "diff_approach") || (_param == "diff_drain") || (_param == "mode");
+					}
+					else if (_mode == MODE::get_scores)
+					{
+						valid = (_param == "score") || (_param == "username") || (_param == "count300") ||
+							    (_param == "count100") || (_param == "count50") || (_param == "countmiss") ||
+								(_param == "maxcombo") || (_param == "countkatu") || (_param == "countgeki") ||
+								(_param == "perfect") || (_param == "enabled_mods");	
+					}
+					else if (_mode == MODE::get_user_best)
+					{
+						valid = (_param == "beatmap_id") || (_param == "score") || (_param == "maxcombo") ||
+							    (_param == "count50") || (_param == "count100") || (_param == "count300") ||
+								(_param == "countmiss") || (_param == "countkatu") || (_param == "countgeki") ||
+								(_param == "perfect") || (_param == "enabled_mods") || (_param == "user_id") ||
+								(_param == "date") || (_param == "rank") || (_param == "pp");
+					}
+					else if (_mode == MODE::get_user_recent)
+					{
+						valid = (_param == "beatmap_id") || (_param == "score") || (_param == "maxcombo") ||
+							    (_param == "count50") || (_param == "count100") || (_param == "count300") ||
+								(_param == "countmiss") || (_param == "countkatu") || (_param == "countgeki") ||
+								(_param == "perfect") || (_param == "enabled_mods") || (_param == "user_id") ||
+								(_param == "date") || (_param == "rank");
+					}
+					else if (_mode == MODE::get_user)
+					{
+						valid = (_param == "user_ID") || (_param == "username") || (_param == "count300") ||
+							    (_param == "count100") || (_param == "count50") || (_param == "playcount") ||
+								(_param == "ranked_score") || (_param == "total_score") || (_param == "pp_rank") ||
+								(_param == "level") || (_param == "pp_raw") || (_param == "accuracy") ||
+								(_param == "count_rank_ss") || (_param == "count_rank_a") || (_param == "country") ||
+								/*(_param == "events") ||*/ (_param == "beatmap_id") || (_param == "beatmapset_id") ||
+								(_param == "data") || (_param == "epicfactor"); // events Unsuported for now :(
+					}
+					/*else if (_mode == MODE::get_match)  // Unsuported for now
+					{
+						valid = (_param == "match") || (_param == "games");
+					}*/
+					else
+					{
+						#ifdef _DEBUG
+								cout << "ERROR: Invalid mode!" << endl;
+						#endif
+					}
+
+					if (valid)
+						value = data[_index][_param].asString();
+					else
+					{
+						#ifdef _DEBUG
+							cout << "ERROR: Invalid token \""<<_param<<"\" for specified mode!" << endl;
+						#endif
+					}
+				}
+				else
+				{
+					#ifdef _DEBUG
+								cout << "ERROR: Specified range is out of bounds!" << endl;
+					#endif
+				}
+
+				return value;
+			}
+
+			unsigned int size() const
+			{
+				return data.size();
+			}
+
+			void operator=(Json::Value& _data){ data = _data; }
+
+			private:
+				Json::Value data;
 		};
-		/*enum class GET_USER { user_ID = 0, username, count300, count100, count50, playcount, ranked_score, total_score, pp_rank, level, pp_raw, accuracy,
-			count_rank_ss, count_rank_s, count_rank_a, country, events, beatmap_ID, beatmapset_ID, data, epicfactor, SIZE
-		};*/ // Unsuported for now :(
-		enum class GET_SCORES { score = 0, username, count300, count100, count50, countmiss, maxcombo, countkatu, countgeki, perfect, enabled_mods,
-			user_ID, date, rank, pp, SIZE
-		};
-		enum class GET_USER_BEST {	beatmap_ID = 0, score, maxcombo, count50, count100, count300, countmiss, countkatu, countgeki, perfect,
-			enabled_mods, user_ID, date, rank, pp, SIZE
-		};
-		enum class  GET_USER_RECENT { beatmap_ID = 0, score, maxcombo, count50, count100, count300, countmiss, countkatu, countgeki, perfect,
-			enabled_mods, user_ID, date, rank, SIZE
-		};
-		enum class GET_MATCH { match = 0, games, SIZE }; // not used for now
-		enum class MODS { /* TODO */ SIZE }; // not used for now
 
 		static Osu_Info& getInstance();
 
@@ -92,11 +183,28 @@ class Osu_Info
 		// \RET: 
 		//		@Fail: Empty vector if data.txt is empty or invalid
 		//      @Good: Vector of values
-		vector<vector<string>> getInfo(MODE, array<string, 8> _params);
+		vector<vector<string>> getInfo(MODE _mode, array<string, 8> _params);
 
-		// Deprecated
-		// Goes through all the sets within the data, to find and extract data relating to the given token(s).
-		//static vector<Table<string, string>> getTables(string* _data, vector<string> _tokens);
+		template<MODE T>
+		OsuData<T> getInfo(array<string, 8> _params)
+		{
+			OsuData<T> data;
+			Json::Value root;
+			Json::Reader reader;
+			string url = Osu_Info::URL(T, _params);
+
+			bool parsedSuccess = reader.parse(Osu_Info::getJSON(url), root, false);
+			if (!parsedSuccess)
+			{
+				#ifdef _DEBUG
+					cout << "Failed to parse JSON" << endl
+					  	 << reader.getFormattedErrorMessages() << endl;
+				#endif
+			}
+
+			data = root;
+			return data;
+		}
 
 	private:
 		static string key;
@@ -122,3 +230,4 @@ class Osu_Info
 		// Generates an URL based on the given paramenters. It also ensurse that the info has been corretly inputed
 		string URL(MODE _mode, array<string, 8> _param);
 };
+

@@ -1,4 +1,5 @@
 #include "../header/Osu-Info.h"
+#include "../header/JsonCpp/json/reader.h"
 
 // Need c++11
 #if defined(_MSC_VER)
@@ -28,7 +29,7 @@ string Osu_Info::getData(string _url)
 	return JSON_Parser::getInstance().OpenJSON(&JSON);
 }
 
-vector<vector<string>> Osu_Info::getInfo(Osu_Info::MODE _mode, array<string, 8> _params)
+/*vector<vector<string>> Osu_Info::getInfo(MODE _mode, array<string, 8> _params)
 {
 	string url		 = Osu_Info::URL(_mode, _params);
 	string data		 = Osu_Info::getData(url);
@@ -57,11 +58,11 @@ vector<vector<string>> Osu_Info::getInfo(Osu_Info::MODE _mode, array<string, 8> 
 	}
 	
 	return values;
-}
+}*/
 
 //**********  PRIVATE PARTS... NO TOUCHY  *****************
 
-string Osu_Info::URL(Osu_Info::MODE _mode, array<string, 8> _param)
+string Osu_Info::URL(MODE _mode, array<string, 8> _param)
 {
 	string url = "https://osu.ppy.sh/api/";
 
@@ -223,20 +224,6 @@ int Osu_Info::findToken(vector<string> *_set, string _token)
 		return -1;
 	}
 	else return i;
-}
-
-unsigned Osu_Info::getNumValue(MODE _mode)
-{
-	switch (_mode)
-	{
-		case MODE::get_beatmaps:	return U32 GET_BEATMAPS::SIZE;
-		case MODE::get_match:		return U32 GET_MATCH::SIZE;
-		case MODE::get_scores:		return U32 GET_SCORES::SIZE;
-		//case MODE::get_user:		return U32 GET_USER::SIZE;     Unsupported for now
-		case MODE::get_user_best:	return U32 GET_USER_BEST::SIZE;
-		case MODE::get_user_recent:	return U32 GET_USER_RECENT::SIZE;
-		default:					return 0;
-	}
 }
 
 string Osu_Info::getAPIKey()

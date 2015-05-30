@@ -2,7 +2,7 @@
 	abraker, May 2015
 */
 
-#pragma comment(lib, "Osu!API++-debug")
+//#pragma comment(lib, "Osu!API++-debug")
 
 #include <cstdlib>
 #include <iostream>
@@ -17,8 +17,8 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	// user_best info. It is loaded into the vector as so: user_best[row][token]
-	vector<vector<string>> user_best;
+	// user_best info. The template parameter is the type of data we will be getting
+	Osu_Info::OsuData<MODE::get_user_best> user_best;
 
 	// declare an array of parameters. THIS MUST BE SIZE OF 8!
 	array<string, 8> params;  
@@ -35,28 +35,28 @@ int main(int argc, char *argv[])
 	}
 	
 	// load parameters
-	params[U32 Osu_Info::PARAM::user_ID]	= "abraker";
-	params[U32 Osu_Info::PARAM::game_mode]	= GAMEMODE::Mania;
-	params[U32 Osu_Info::PARAM::limit]		= "50";
-	user_best = Osu_Info::getInstance().getInfo(Osu_Info::MODE::get_user_best, params);
+	params[U32 PARAM::user_ID]	 = "abraker";
+	params[U32 PARAM::game_mode] = GAMEMODE::Mania;
+	params[U32 PARAM::limit]	 = "50";
+	user_best = Osu_Info::getInstance().getInfo<MODE::get_user_best>(params);
 
 	// refresh the parameters
 	params.fill(""); 
 
 	// we will need these to store the info
 	vector<string> diff;
-	vector<vector<string>> beatmap_info;
+	Osu_Info::OsuData<MODE::get_beatmaps> beatmap_info;
 
 	// go through the beatmaps, getting their info
 	for (unsigned j = 0; j < user_best.size(); j++) 
 	{
-		params[U32 Osu_Info::PARAM::beatmap_ID] = user_best[j][U32 Osu_Info::GET_USER_BEST::beatmap_ID];  // access the jth value of the beatmap_ID token
-		params[U32 Osu_Info::PARAM::game_mode]  = GAMEMODE::Mania;
-		params[U32 Osu_Info::PARAM::limit]		= "50";
-		beatmap_info = Osu_Info::getInstance().getInfo(Osu_Info::MODE::get_beatmaps, params);
+		params[U32 PARAM::beatmap_ID] = user_best.getValue(j, "beatmap_id");  // access the jth value of the beatmap_id token
+		params[U32 PARAM::game_mode]  = GAMEMODE::Mania;
+		params[U32 PARAM::limit]	  = "50";
+		beatmap_info = Osu_Info::getInstance().getInfo<MODE::get_beatmaps>(params);
 
 		// since there is only 1 beatmap in question, we will only need to access the 0th index
-		diff.push_back(beatmap_info[0][U32 Osu_Info::GET_BEATMAPS::difficultyrating]);
+		diff.push_back(beatmap_info.getValue(0, "difficultyrating"));
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // limit the number of requests per time period so peppy doesn't get upset
 	}
 	
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 	for (unsigned j = 0; j < user_best.size(); j++)
 	{
 		cout << diff[j] << "   "
-			 << user_best[j][U32 Osu_Info::GET_USER_BEST::pp] << endl;
+			 << user_best.getValue(j, "pp") << endl;
 	}
 	std::system("PAUSE");
 	return EXIT_SUCCESS;
