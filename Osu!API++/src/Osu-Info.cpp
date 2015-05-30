@@ -23,43 +23,6 @@ void Osu_Info::setAPIKey(string _key)
 	Osu_Info::key = _key;
 }
 
-string Osu_Info::getData(string _url)
-{
-	ifstream JSON = Osu_Info::getJSON(_url);
-	return JSON_Parser::getInstance().OpenJSON(&JSON);
-}
-
-/*vector<vector<string>> Osu_Info::getInfo(MODE _mode, array<string, 8> _params)
-{
-	string url		 = Osu_Info::URL(_mode, _params);
-	string data		 = Osu_Info::getData(url);
-	unsigned numSets = JSON_Parser::getInstance().getNumSets(&data);
-	vector<vector<string>> values;
-
-	if (data != "[]" && data != "")
-	{
-		values.resize(numSets);
-		for (unsigned i = 0; i < numSets; i++)
-		{
-			string set = JSON_Parser::getInstance().getSet(&data, i);
-			Osu_Info::Table<string, string> info = JSON_Parser::getInstance().getTokenInfo(&set);
-			for (unsigned j = 0; j < info.first.size(); j++)
-				values[i].push_back(info.second[j]);
-		}
-	}
-	else
-	{
-		#ifdef _DEBUG
-			cout << "Unable to get info from data "<<endl;
-		#endif
-		values.resize(1);
-		for(unsigned i = 0; i < getNumValue(_mode); i++)
-			values[0].push_back("");
-	}
-	
-	return values;
-}*/
-
 //**********  PRIVATE PARTS... NO TOUCHY  *****************
 
 string Osu_Info::URL(MODE _mode, array<string, 8> _param)

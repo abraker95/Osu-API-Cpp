@@ -41,7 +41,6 @@
 #include <string>
 #include <array>
 #include "../header/JsonCpp/json/reader.h"
-#include "JSON-Parser.h"
 #include "Downloader.h"
 
 using namespace std;
@@ -177,13 +176,6 @@ class Osu_Info
 		//		@Fail: Empty string if invalid URL
 		//      @Good: Contents of data.txt (the downloaded JSON file)
 		string getData(string _url);
-
-		// Gets the values from the sets beased on the given mode and paramenters.
-		// Organizes the data by: [# set][Type of data]
-		// \RET: 
-		//		@Fail: Empty vector if data.txt is empty or invalid
-		//      @Good: Vector of values
-		vector<vector<string>> getInfo(MODE _mode, array<string, 8> _params);
 
 		template<MODE T>
 		OsuData<T> getInfo(array<string, 8> _params)
