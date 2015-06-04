@@ -15,7 +15,7 @@ array<string, 8> params;
 Osu_Info::OsuData<MODE::get_user_best> user_best;
 ~~~
 
-Now to start, we need to declare to variable: One to hold the parameters and one to hold the info we are going to get. The variable to hold the parameters is a std::array type and MUST be of size 8. The variable to hold the info is called OsuData. So OsuData has a template arguement called MODE::get_user_best. This the template arguement indicates a mode which allows the variable to store user best data. All types of data are named accordingly to match what is listed under [osu!API's documentation](https://github.com/peppy/osu-api/wiki).
+Now to start, we need to declare to variable: One to hold the parameters and one to hold the info we are going to get. The variable to hold the parameters is a std::array type and MUST be of size 8. The variable to hold the info is called OsuData. So OsuData has a template arguement called MODE::get_user_best. This the template arguement indicates a mode which allows the variable to store user best data. All types of data are named accordingly to match what is listed under "responce" in the [osu!API's documentation](https://github.com/peppy/osu-api/wiki).
 
 ~~~
 // load parameters
