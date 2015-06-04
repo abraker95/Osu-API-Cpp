@@ -53,7 +53,7 @@ So now that we got the user_best data, we might want to get something like the d
 	}
 ~~~
 
-Now lets iterate over the user's top maps to get the difficulty of each one. To access the data within osuData we use its getValue member function. Since we specified to return the data pertaining to a certain map by passing the beatmap ID parameter, there will be only one beatmap returned. So in this example, we are getting the 0th difficulty rating value (1st map). Refer to the osu!API decumentation for other supported data. Since beatmap_info will be overwritten with each itteration, we store the the difficulty rating into a vector of strings. Alternatively it can be an array of strings, but concidering that some beatmaps are takened down ([this](https://osu.ppy.sh/s/145573) one for example), there might be blank data towards the end. In the event data cannot be retrieved, the data will be an empty string.
+Now lets iterate over the user's top maps to get the difficulty of each one. To access the data within osuData we use its getValue member function. Since we specified to return the data pertaining to a certain map by passing the beatmap ID parameter, there will be only one beatmap returned. So in this example, we are getting the 0th difficulty rating value (1st map). Refer to the osu!API decumentation for other supported data. Since beatmap_info will be overwritten with each itteration, we store the the difficulty rating into a vector of strings. Alternatively it can be an array of strings, but concidering that some beatmaps are takened down ([this](https://osu.ppy.sh/s/145573) one for example), there might be blank data towards the end which should be empty strings.
 
 ~~~
 / print out the data
