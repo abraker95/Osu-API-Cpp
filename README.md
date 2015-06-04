@@ -65,4 +65,4 @@ Now lets iterate over the user's top maps to get the difficulty of each one. To 
 	}
 ~~~
 	
-	If the previous was too hard to figure out how to get the data, here is a simpler example. Here we are just printing the difficulty rating and PP of the beatmaps one by one. 
+If the previous was too hard to figure out how to get the data, here is a simpler example. Here we are just printing the difficulty rating and PP of the beatmaps one by one. 
