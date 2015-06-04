@@ -25,7 +25,7 @@ params[U32 PARAM::limit]	 = "50";
 user_best = Osu_Info::getInstance().getInfo<MODE::get_user_best>(params);
 ~~~
 
-The osu!API takes up to 8 types of parameters. Here we are passing the user ID, game mode, and limit as listed under the get_user_best section of the osu!API documentation. Some modes require parameters such as user ID to be specified and the library WILL complain if it is not. Refer to [osu!API documentation](https://github.com/peppy/osu-api/wiki) on the required parameters under the specified mode(s). After loading the parameters, the pass the to the getInfo function which returns the data we initially wanted. Notice that the getInfo function also has a template parameter. That HAS to match the type of data you are assigning it to or your compiler will error.
+The osu!API takes up to 8 types of parameters. Here we are passing the user ID, game mode, and limit as listed under the get_user_best section of the osu!API documentation. Notice the "U32" prefix. That is needed to typecast the PARAM enum to an unsigned int. Some modes require parameters such as user ID to be specified and the library WILL complain if it is not. Refer to [osu!API documentation](https://github.com/peppy/osu-api/wiki) on the required parameters under the specified mode(s). After loading the parameters, the pass the to the getInfo function which returns the data we initially wanted. Notice that the getInfo function also has a template parameter. That HAS to match the type of data you are assigning it to or your compiler will error.
 
 ~~~
 // refresh the parameters
