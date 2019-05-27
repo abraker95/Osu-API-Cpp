@@ -56,13 +56,12 @@ So now that we got the user_best data, we might want to get something like the d
 Now lets iterate over the user's top maps to get the difficulty of each one. To access the data within osuData we use its getValue member function. Since we specified to return the data pertaining to a certain map by passing the beatmap ID parameter, there will be only one beatmap returned. So in this example, we are getting the 0th difficulty rating value (1st map). Refer to the [osu!API documentation](https://github.com/peppy/osu-api/wiki) under "responce" for other supported data under the specified mode(s). Since beatmap_info will be overwritten with each iteration, we store the the difficulty rating into a vector of strings. Alternatively it can be an array of strings, but concidering that some beatmaps are takened down ([this](https://osu.ppy.sh/s/145573) one for example), the API will have trouble retriving info. In this event, the data returned should be empty strings.
 
 ~~~
-/ print out the data
-	cout << "Difficulty          PP" << endl;
-	for (unsigned j = 0; j < user_best.size(); j++)
-	{
-		cout << diff[j] << "   "
-			 << user_best.getValue(j, "pp") << endl;
-	}
+// print out the data
+cout << "Difficulty          PP" << endl;
+for (unsigned j = 0; j < user_best.size(); j++)
+{
+	cout << diff[j] << "   " << user_best.getValue(j, "pp") << endl;
+}
 ~~~
 	
 If the previous example is too hard to figure out on how to get the data, here is a simpler example. Here we are just printing the difficulty rating and PP of the beatmaps one by one. 
